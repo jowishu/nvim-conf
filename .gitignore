@@ -1,2 +1,4 @@
 .DS_Store
 bundle/
+autoload/*
+autoload/plug.vim
