@@ -6,8 +6,8 @@ Plug 'scrooloose/nerdtree'
 Plug 'Lokaltog/vim-powerline'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'jiangmiao/auto-pairs'
-" Plug 'SirVer/ultisnips'
-" Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 Plug 'Valloric/YouCompleteMe'
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'Yggdroot/indentLine'
@@ -134,6 +134,8 @@ let g:ycm_error_symbol = 'x'
 map<C-k> :pyf ~/.local/clang/share/clang/clang-format.py<CR>
 nnoremap <C-g> :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <C-x> :YcmCompleter FixIt<CR>
+" 选中多行格式化
+map <C-k> :pyf ~/.config/nvim/prebuild/clang-format.py<CR> 
 let g:ycm_confirm_extra_conf=0
 
 "" vim-clang-format
@@ -141,9 +143,9 @@ nnoremap <C-f> :ClangFormat<CR>
 
 " UltiSnips
 " 解决与 YCM 插件的冲突
-" let g:UltiSnipsExpandTrigger="<C-j>"
-" let g:UltiSnipsJumpForwardTrigger="<C-j>"
-" let g:UltiSnipsJumpBackwardTrigger="<C-k>"
+let g:UltiSnipsExpandTrigger="<C-j>"
+let g:UltiSnipsJumpForwardTrigger="<C-j>"
+let g:UltiSnipsJumpBackwardTrigger="<C-k>"
 let g:rbpt_colorpairs = [
 \ ['brown', 'RoyalBlue3'],
 \ ['Darkblue', 'SeaGreen3'],
