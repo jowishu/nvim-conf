@@ -30,6 +30,7 @@ Plug 'vimlab/split-term.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'chiphogg/vim-prototxt'
 Plug 'tell-k/vim-autopep8'
+Plug 'fatih/vim-go'
 call plug#end()
 
 filetype plugin indent on " required
@@ -132,7 +133,7 @@ let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_warning_symbol = '!'
 let g:ycm_error_symbol = 'x'
 map<C-k> :pyf ~/.local/clang/share/clang/clang-format.py<CR>
-nnoremap <C-g> :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <C-j> :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <C-x> :YcmCompleter FixIt<CR>
 " 选中多行格式化
 map <C-k> :pyf ~/.config/nvim/prebuild/clang-format.py<CR> 
@@ -143,9 +144,9 @@ nnoremap <C-f> :ClangFormat<CR>
 
 " UltiSnips
 " 解决与 YCM 插件的冲突
-let g:UltiSnipsExpandTrigger="<C-j>"
-let g:UltiSnipsJumpForwardTrigger="<C-j>"
-let g:UltiSnipsJumpBackwardTrigger="<C-k>"
+" let g:UltiSnipsExpandTrigger="<C-j>"
+" let g:UltiSnipsJumpForwardTrigger="<C-j>"
+" let g:UltiSnipsJumpBackwardTrigger="<C-k>"
 let g:rbpt_colorpairs = [
 \ ['brown', 'RoyalBlue3'],
 \ ['Darkblue', 'SeaGreen3'],
@@ -269,3 +270,8 @@ let g:autopep8_disable_show_diff=1
 let g:autopep8_indent_size=4
 let g:autopep8_aggressive=1
 map <leader>f :Autopep8<CR>
+
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
