@@ -3,12 +3,13 @@ filetype on " required
 
 call plug#begin('~/.config/nvim/bundle')
 Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/syntastic'
 Plug 'Lokaltog/vim-powerline'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'jiangmiao/auto-pairs'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'Valloric/YouCompleteMe'
+Plug 'ycm-core/YouCompleteMe'
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'Yggdroot/indentLine'
 Plug 'tpope/vim-fugitive' " git wrapper
@@ -21,16 +22,16 @@ Plug 'nickhutchinson/vim-cmake-syntax'
 Plug 'vim-scripts/taglist.vim'
 Plug 'leafgarland/typescript-vim' " syntax
 Plug 'Shougo/vimshell.vim'
-Plug 'rhysd/vim-clang-format'
-Plug 'elzr/vim-json'
 Plug 'plasticboy/vim-markdown'
 Plug 'joker1007/vim-markdown-quote-syntax'
 Plug 'mzlogin/vim-markdown-toc'
-Plug 'vimlab/split-term.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'chiphogg/vim-prototxt'
-Plug 'tell-k/vim-autopep8'
-Plug 'fatih/vim-go'
+Plug 'davewongillies/vim-gradle'
+Plug 'junegunn/fzf.vim'
+Plug 'google/vim-maktaba'
+Plug 'google/vim-glaive'
+Plug 'google/vim-codefmt'
 call plug#end()
 
 filetype plugin indent on " required
@@ -109,6 +110,16 @@ let g:indent_guides_start_level=2 " 从第二层开始可视化显示缩进
 let g:indent_guides_guide_size=1 " 色块宽度
 :nmap <silent> <Leader>i <Plug>IndentGuidesToggle
 
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_cpplint_exec = 'cpplint'
+let g:syntastic_cpp_checkers = ['cpplint', 'clang++']
+let g:syntastic_cpp_cpplint_thres = 5
+let syntastic_aggregate_errors = 1
+let g:syntastic_error_symbol = "✗"
+let g:syntastic_warning_symbol = "⚠"
+let g:syntastic_style_error_symbol = '!'
+let g:syntastic_style_warning_symbol = '?'
+
 " 代码折叠
 set foldmethod=indent " 基于缩进尽心代码折叠, 操作: za打开或关闭折叠
 set nofoldenable " 启动vim是关闭代码折叠
@@ -120,7 +131,10 @@ set autochdir " 自动切换工作目录
 set noerrorbells " 出错时不发出声响
 
 " NERDTree
-map <C-e> :NERDTreeToggle<CR> " ctrl-e触发NERDTree
+map <C-e> :NERDTreeToggle<CR>
+" fzf
+set rtp+=/usr/local/opt/fzf
+nmap <C-p> :Files<CR>
 
 "" ycm
 let g:ycm_key_invoke_completion = '<C-a>'
@@ -132,21 +146,30 @@ let g:ycm_min_num_of_chars_for_completion = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_warning_symbol = '!'
 let g:ycm_error_symbol = 'x'
-map<C-k> :pyf ~/.local/clang/share/clang/clang-format.py<CR>
+let g:ycm_show_diagnostics_ui = 1
+let g:ycm_key_invoke_completion = '<c-h>'
+set completeopt=menu,menuone
+let g:ycm_add_preview_to_completeopt = 0
 nnoremap <C-j> :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <C-x> :YcmCompleter FixIt<CR>
 " 选中多行格式化
-map <C-k> :pyf ~/.config/nvim/prebuild/clang-format.py<CR> 
+" map <C-k> :pyf ~/.config/nvim/prebuild/clang-format.py<CR>
 let g:ycm_confirm_extra_conf=0
 
-"" vim-clang-format
-nnoremap <C-f> :ClangFormat<CR>
+call glaive#Install()
+Glaive codefmt plugin[mappings]
+Glaive codefmt google_java_executable="java -jar /Users/jiabw/.local/jar/google-java-format-1.8-all-deps.jar"
 
-" UltiSnips
+"" google code format
+nnoremap <C-f> :FormatCode<CR>
+nnoremap <C-k> :FormatLines<CR>
+
+"" UltiSnips
 " 解决与 YCM 插件的冲突
-" let g:UltiSnipsExpandTrigger="<C-j>"
-" let g:UltiSnipsJumpForwardTrigger="<C-j>"
-" let g:UltiSnipsJumpBackwardTrigger="<C-k>"
+let g:UltiSnipsExpandTrigger="<C-j>"
+let g:UltiSnipsJumpForwardTrigger="<C-j>"
+let g:UltiSnipsJumpBackwardTrigger="<C-k>"
+
 let g:rbpt_colorpairs = [
 \ ['brown', 'RoyalBlue3'],
 \ ['Darkblue', 'SeaGreen3'],
@@ -188,7 +211,6 @@ endif
 
 " vim-lastplace
 let g:lastplace_ignore = "gitcommit,gitrebase,svn,hgcommit"
-let g:python2_host_prog = '/usr/local/bin/python2'
 let g:python3_host_prog = '/usr/local/bin/python3'
 
 " Taglist
@@ -250,8 +272,6 @@ let g:vim_json_syntax_conceal = 0
 " vim gitgutter
 let g:gitgutter_max_signs = 2000
 
-autocmd BufRead,BufNewFile *.h,*.cpp,*.hpp,*.cc setfiletype cpp
-autocmd BufRead,BufNewFile *.rs setfiletype rust
 autocmd FileType cpp setlocal spell spelllang=en_us
 hi clear SpellBad
 hi SpellBad cterm=underline
@@ -275,3 +295,5 @@ noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
+
+let g:load_doxygen_syntax=1
